@@ -1,0 +1,46 @@
+#
+# ~/.bashrc
+#
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+export PATH="$HOME/bin:$PATH"
+export EDITOR="nvim"
+
+# Find in history with arrows by part of command
+bind '"\e[A": history-search-backward'
+bind '"\e[B": history-search-forward'
+
+# Find with fzf in commands history
+__fzf_history_search() {
+  local selected_command
+  selected_command=$(history | fzf --tac --no-sort +s --tiebreak=index --height 50% --reverse --query="$READLINE_LINE")
+  if [ -n "$selected_command" ]; then
+    READLINE_LINE=$(echo "$selected_command" | sed 's/^[ ]*[0-9]*[ ]*//')
+    READLINE_POINT=${#READLINE_LINE}
+  fi
+}
+
+# Call Ctrl+R for fzf history find
+bind -x '"\C-r": __fzf_history_search'
+
+bind -x '"\C-f": tmux-sessionizer'
+
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+PS1='[\u@\h \W]\$ '
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+eval "$(starship init bash)"
+
+neofetch
