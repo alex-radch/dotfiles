@@ -24,12 +24,12 @@ __fzf_history_search() {
 
 # Call Ctrl+R for fzf history find
 bind -x '"\C-r": __fzf_history_search'
-
 bind -x '"\C-f": tmux-sessionizer'
-
 
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
+alias cz='chezmoi'
+alias lg='lazygit'
 PS1='[\u@\h \W]\$ '
 
 function y() {

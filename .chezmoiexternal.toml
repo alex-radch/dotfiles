@@ -1,0 +1,4 @@
+[".config/tmux/plugins/catppuccin"]
+    type = "git-repo"
+    url = "https://github.com/catppuccin/tmux.git"
+    clone.args = ["--branch v0.2.0", "--single-branch"]
