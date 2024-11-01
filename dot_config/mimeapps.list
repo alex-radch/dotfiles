@@ -1,0 +1,17 @@
+[Default Applications]
+x-scheme-handler/tonsite=org.telegram.desktop.desktop
+text/html=google-chrome.desktop
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/about=google-chrome.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+image/heic=nsxiv.desktop
+image/heif=nsxiv.desktop
+image/webp=nsxiv.desktop
+image/png=nsxiv.desktop
+image/jpeg=nsxiv.desktop
+image/jpg=nsxiv.desktop
+image/gif=nsxiv.desktop
+
+[Added Associations]
+x-scheme-handler/tonsite=org.telegram.desktop.desktop;
