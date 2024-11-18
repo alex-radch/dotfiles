@@ -24,12 +24,12 @@ window#waybar {
 #workspaces {
     background: @bg;
     margin: 5px 5px;
-    padding: 8px 5px;
+    padding: 6px 5px;
     border-radius: 16px;
     color: @mauve;
 }
 #workspaces button {
-    padding: 0px 5px;
+    padding: 0px 7px 2px;
     margin: 0px 3px;
     border-radius: 16px;
     color: @lavender;
@@ -37,9 +37,8 @@ window#waybar {
     transition: all 0.3s ease-in-out;
 }
 #workspaces button.active {
-    background-color: @blue;
     color: @crust;
-    border-radius: 16px;
+    background-color: @blue;
     min-width: 50px;
     background-size: 400% 400%;
     transition: all 0.3s ease-in-out;
