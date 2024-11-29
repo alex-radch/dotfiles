@@ -1,0 +1,12 @@
+{{ if eq .chezmoi.os "windows" }}
+
+$ConfigDir = "$HOME\.config\chezmoi"
+$KeyFile = "$ConfigDir\key.txt"
+
+if (-Not (Test-Path -Path $KeyFile)) {
+    New-Item -ItemType Directory -Force -Path $ConfigDir | Out-Null
+    chezmoi age decrypt --output $KeyFile --passphrase "{{ .chezmoi.sourceDir }}/key.txt.age"
+    Set-ItemProperty -Path $KeyFile -Name Attributes -Value ([System.IO.FileAttributes]::ReadOnly)
+}
+
+{{ end }}
