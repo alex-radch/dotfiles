@@ -5,5 +5,5 @@ sudo pacman -S chezmoi
 ```
 Install dotfiles on new machine with a single command:
 ```
-chezmoi init -ssh --apply alex-radch
+chezmoi init --ssh --apply alex-radch
 ```
