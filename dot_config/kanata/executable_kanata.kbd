@@ -1,0 +1,70 @@
+(defcfg
+  process-unmapped-keys yes
+)
+
+(defvar
+  tap-time 100
+  hold-time 200
+  key-timing-timeout 150
+  tap-hold-timeout 500
+)
+
+;; for home row mods
+(deftemplate charmod (char mod)
+  (switch 
+    ((key-timing 3 less-than $key-timing-timeout)) $char break
+    () (tap-hold-release 0 $tap-hold-timeout $char $mod) break
+  )
+)
+
+(defalias
+  ;; TODO: add symbols somehow to RU layout
+  symbols-held (layer-while-held symbols)
+  live-reload (tap-dance 200 (lmet lmet lrld))
+
+  ;; home row mods
+  a-mod (t! charmod a lmet)
+  s-mod (t! charmod s lalt)
+  d-mod (t! charmod d lsft)
+  f-mod (t! charmod f lctl)
+  g-mod (t! charmod g @symbols-held)
+  h-mod (t! charmod h @symbols-held)
+  j-mod (t! charmod j rctl)
+  k-mod (t! charmod k rsft)
+  l-mod (t! charmod l ralt)
+  ;-mod (t! charmod ; rmet)
+	;; EN (multi lalt lsft (layer-switch symbols))
+	;; RU (multi lalt lsft (layer-switch symbol-ru))
+)
+
+(deflayermap base
+  lmet @live-reload
+  caps @symbols-held
+  a @a-mod
+  s @s-mod
+  d @d-mod
+  f @f-mod
+  g @g-mod
+  h @h-mod
+  j @j-mod
+  k @k-mod
+  l @l-mod
+  ; @;-mod
+)
+
+(defsrc
+  q  w  e  r  t  y  u  i  o  p  [
+  a  s  d  f  g  h  j  k  l  ;  '
+  z  x  c  v  b  n  m  ,  .  /
+)
+
+#| symbols layer
+  |  &  ?  ;  :  =  +  -  *  /  %
+  ^  [  {  (  <  >  )  }  ]  $  \
+  `  '  "  !  _  ,  .  @  #  ~
+|#
+(deflayer symbols
+  S-\  S-7  S-/  ;  S-;  =  S-=  - S-8  /  S-5
+  S-6  [  S-[  S-9  S-,  S-.  S-0  S-]  ]  S-4  \
+  `  '  S-'  S-1  S--  ,  .  S-2  S-3  S-`  
+)
