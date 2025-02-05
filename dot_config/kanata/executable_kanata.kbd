@@ -3,9 +3,8 @@
 )
 
 (defvar
-  tap-time 100
   hold-time 200
-  key-timing-timeout 150
+  key-timing-timeout 250
   tap-hold-timeout 500
 )
 
@@ -13,7 +12,7 @@
 (deftemplate charmod (char mod)
   (switch 
     ((key-timing 3 less-than $key-timing-timeout)) $char break
-    () (tap-hold-release 0 $tap-hold-timeout $char $mod) break
+    () (tap-hold-release-timeout $hold-time $tap-hold-timeout $char $mod $char) break
   )
 )
 
@@ -33,8 +32,8 @@
   k-mod (t! charmod k rsft)
   l-mod (t! charmod l ralt)
   ;-mod (t! charmod ; rmet)
-	;; EN (multi lalt lsft (layer-switch symbols))
-	;; RU (multi lalt lsft (layer-switch symbol-ru))
+;;  EN (multi lalt lsft (layer-switch symbols))
+;;  RU (multi lalt lsft (layer-switch symbol-ru))
 )
 
 (deflayermap base
