@@ -10,6 +10,7 @@ $directory\
 $git_branch\
 $git_status\
 [](fg:green bg:teal)\
+$dotnet\
 $c\
 $rust\
 $golang\
@@ -125,6 +126,12 @@ format = '[[($all_status$ahead_behind )](fg:base bg:green)]($style)'
 symbol = ""
 style = "bg:teal"
 format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
+
+[dotnet]
+symbol = " "
+style = "bg:teal"
+format = '[[ $symbol( $tfm) ](fg:base bg:teal)]($style)'
+detect_extensions = ['sln', 'csproj', 'fsproj', 'xproj']
 
 [c]
 symbol = " "
