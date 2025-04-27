@@ -130,7 +130,7 @@ format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 [dotnet]
 symbol = " "
 style = "bg:teal"
-format = '[[ $symbol( $tfm) ](fg:base bg:teal)]($style)'
+format = '[[ $symbol( $version) ](fg:base bg:teal)]($style)'
 detect_extensions = ['sln', 'csproj', 'fsproj', 'xproj']
 
 [c]
