@@ -11,8 +11,8 @@
     "tray",
     "custom/playerctl#backward",
     "custom/playerctl#play",
-    "custom/playerctl#forward",
-    "custom/playerlabel"
+    "custom/playerctl#forward"
+    /*"custom/playerlabel"*/
   ],
   "modules-center": [
     /*"cava#left",*/
@@ -141,13 +141,13 @@
   "cpu": {
     "interval": 5,
     "format": "{usage}% ",
-    "on-click": "hyprctl dispatch -- exec [float\\; size 1400 800\\;move onscreen cursor 50% 50%] kitty -e btop -p 1"
+    "on-click": "hyprctl dispatch -- exec [float\\; size 1400 800\\;move onscreen cursor 50% 50%] ghostty -e btop -p 1"
   },
   "memory": {
     "interval": 5,
     "format": "{used} GB  ",
     "tooltip-format": "{used}/{total} GB\n{swapUsed}/{swapTotal} GB",
-    "on-click": "hyprctl dispatch -- exec [float\\; size 1400 800\\;move onscreen cursor 50% 50%] kitty -e btop -p 2"
+    "on-click": "hyprctl dispatch -- exec [float\\; size 1400 800\\;move onscreen cursor 50% 50%] ghostty -e btop -p 2"
   },
   "pulseaudio": {
     "format": "{volume}% {icon}",
@@ -188,7 +188,7 @@
   "clock": {
     "tooltip": false,
     "interval": 1,
-    "format": "{:%H:%M:%S %d.%m.%Y}",
-    "on-click": "hyprctl dispatch -- exec [float\\; size 900 480\\;move onscreen cursor 50% 50%] kitty -e calcurse"
-  },
+    "format": "{:%d.%m.%Y %H:%M:%S}",
+    "on-click": "hyprctl dispatch -- exec [float\\; size 900 480\\;move onscreen cursor 50% 50%] ghostty -e calcurse"
+  }
 }
