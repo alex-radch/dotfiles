@@ -5,6 +5,7 @@ return {
     "nvim-lua/plenary.nvim",
     { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     "nvim-tree/nvim-web-devicons",
+    "nvim-telescope/telescope-ui-select.nvim",
     "folke/todo-comments.nvim",
   },
   config = function()
@@ -32,10 +33,15 @@ return {
         },
       },
       extensions = {
-        fzf = {}
+        fzf = {},
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown(),
+        },
       }
     }
+
     telescope.load_extension("fzf")
+    telescope.load_extension("ui-select")
 
     local keymap = vim.keymap
 
