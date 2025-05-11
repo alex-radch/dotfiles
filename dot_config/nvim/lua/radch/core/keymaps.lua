@@ -13,7 +13,8 @@ keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 -- turn next line to the end of current line without cursor jump
 keymap.set("n", "J", "mzJ`z")
 
--- keep cursor in the center while search or navigate half page
+-- keep cursor in the center while search or navigate half page or to the end of page
+keymap.set("n", "G", "Gzz")
 keymap.set("n", "<C-d>", "<C-d>zz")
 keymap.set("n", "<C-u>", "<C-u>zz")
 keymap.set("n", "n", "nzzzv")

@@ -1,5 +1,0 @@
-[".config/tmux/plugins/catppuccin"]
-    type = "archive"
-    url = "https://github.com/catppuccin/tmux/archive/refs/tags/v1.0.2.tar.gz"
-    exact = true
-    stripComponents = 1
