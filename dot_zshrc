@@ -1,0 +1,56 @@
+# The following lines were added by compinstall
+
+zstyle ':completion:*' completer _complete _ignored
+zstyle :compinstall filename '/home/alex/.zshrc'
+
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+bindkey -v
+# End of lines configured by zsh-newuser-install
+
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+export PATH="$HOME/.dotnet/tools:$PATH"
+export PATH="$HOME/bin:$PATH"
+export EDITOR="nvim"
+
+# Find with fzf in commands history
+__fzf_history_search() {
+  local selected_command
+  selected_command=$(history | fzf --tac --no-sort +s --tiebreak=index --height 50% --reverse --query="$LBUFFER")
+  if [[ -n "$selected_command" ]]; then
+    LBUFFER=$(echo "$selected_command" | sed 's/^[ ]*[0-9]*[ ]*//')
+  fi
+}
+
+# Call Ctrl+R for fzf history find
+zle -N __fzf_history_search
+bindkey ^R __fzf_history_search
+
+bindkey -s ^F "tmux-sessionizer\n"
+
+alias ls='ls --color=auto'
+alias grep='grep --color=auto'
+alias cz='chezmoi'
+alias lg='lazygit'
+PS1='[\u@\h \W]\$ '
+
+function y() {
+	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+	yazi "$@" --cwd-file="$tmp"
+	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+		builtin cd -- "$cwd"
+	fi
+	rm -f -- "$tmp"
+}
+
+eval "$(starship init zsh)"
+
+fastfetch
