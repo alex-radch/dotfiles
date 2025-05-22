@@ -1,0 +1,67 @@
+#!/usr/bin/env bash
+
+# === Reset Cache ===
+if [[ "$1" == "--reset" ]]; then
+  unset DOTNET_LAUNCHER_USE_WATCH
+  unset DOTNET_LAUNCHER_CS_PROJ
+  unset DOTNET_LAUNCHER_PROFILE
+  echo "Cache succesfully cleared."
+  exit 0
+fi
+
+# Cache variables in terminal session
+CACHE_WATCH=${DOTNET_LAUNCHER_USE_WATCH}
+CACHE_PROJECT=${DOTNET_LAUNCHER_CS_PROJ}
+CACHE_PROFILE=${DOTNET_LAUNCHER_PROFILE}
+
+# === Step 1: dotnet watch? ===
+if [ -z "$CACHE_WATCH" ]; then
+  read -rp "Use 'dotnet watch'? (Y/n): " use_watch
+  use_watch=${use_watch:-Y}
+  if [[ "$use_watch" =~ ^[Yy]$ ]]; then
+    DOTNET_CMD="dotnet watch"
+    export DOTNET_LAUNCHER_USE_WATCH="yes"
+  else
+    DOTNET_CMD="dotnet"
+    export DOTNET_LAUNCHER_USE_WATCH="no"
+  fi
+else
+  DOTNET_CMD=$([[ "$CACHE_WATCH" == "yes" ]] && echo "dotnet watch" || echo "dotnet")
+fi
+
+# === Step 2: Project selection ===
+if [ -z "$CACHE_PROJECT" ]; then
+  PROJECT=$(find . -name '*.csproj' | fzf --prompt="Select .csproj: ")
+  if [ -z "$PROJECT" ]; then
+    echo "Project not selected."
+    exit 1
+  fi
+  export DOTNET_LAUNCHER_CS_PROJ="$PROJECT"
+else
+  PROJECT="$CACHE_PROJECT"
+fi
+
+# === Step 3: Select launch profile ===
+LAUNCH_SETTINGS_PATH="$(dirname "$PROJECT")/Properties/launchSettings.json"
+if [ ! -f "$LAUNCH_SETTINGS_PATH" ]; then
+  echo "launchSettings.json not found in $LAUNCH_SETTINGS_PATH"
+  exit 1
+fi
+
+if [ -z "$CACHE_PROFILE" ]; then
+  PROFILES=$(yq -r '.profiles | keys[]' "$LAUNCH_SETTINGS_PATH")
+  PROFILE=$(echo -e "$PROFILES" | fzf --prompt="Select launchProfile: ")
+  if [ -z "$PROFILE" ]; then
+    echo "Profile not selected."
+    exit 1
+  fi
+  export DOTNET_LAUNCHER_PROFILE="$PROFILE"
+else
+  PROFILE="$CACHE_PROFILE"
+fi
+
+# === Step 4: Run command ===
+CMD="$DOTNET_CMD run --project \"$PROJECT\" --launch-profile \"$PROFILE\""
+echo "Start command: $CMD"
+eval $CMD
+

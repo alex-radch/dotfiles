@@ -24,7 +24,7 @@ export EDITOR="nvim"
 # Find with fzf in commands history
 __fzf_history_search() {
   local selected_command
-  selected_command=$(history | fzf --tac --no-sort +s --tiebreak=index --height 50% --reverse --query="$LBUFFER")
+  selected_command=$(history 1 | fzf --tac --no-sort +s --tiebreak=index --height 50% --reverse --query="$LBUFFER")
   if [[ -n "$selected_command" ]]; then
     LBUFFER=$(echo "$selected_command" | sed 's/^[ ]*[0-9]*[ ]*//')
   fi
@@ -39,7 +39,9 @@ bindkey -s ^F "tmux-sessionizer\n"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias cz='chezmoi'
-alias lg='lazygit'
+alias lag='lazygit'
+alias lad='lazydocker'
+alias dl='dotnet-launcher'
 PS1='[\u@\h \W]\$ '
 
 function y() {

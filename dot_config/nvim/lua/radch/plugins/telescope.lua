@@ -14,7 +14,7 @@ return {
 
     telescope.setup {
       defaults = {
-        file_ignore_patterns = { '%__virtual.cs$' },
+        file_ignore_patterns = { "%__virtual.cs$" },
         sorting_strategy = "ascending",
         layout_strategy = "vertical",
         layout_config = {
@@ -31,11 +31,21 @@ return {
         help_tags = {
           theme = "ivy"
         },
+        lsp_document_symbols = {
+          theme = "ivy"
+        },
+        diagnostics = {
+          theme = "ivy",
+          initial_mode = "normal",
+          wrap_results = true
+        },
       },
       extensions = {
         fzf = {},
         ["ui-select"] = {
-          require("telescope.themes").get_dropdown(),
+          require("telescope.themes").get_dropdown({
+            initial_mode = "normal"
+          }),
         },
       }
     }

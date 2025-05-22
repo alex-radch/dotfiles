@@ -90,7 +90,7 @@ vimcmd_symbol = '[](bold fg:green)'
 show_milliseconds = true
 format = "took [$duration]($style) "
 disabled = false
-show_notifications = true
+show_notifications = false
 min_time_to_notify = 45000
 
 [palettes.catppuccin_mocha]

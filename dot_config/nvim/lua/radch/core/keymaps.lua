@@ -19,6 +19,9 @@ keymap.set("n", "<C-d>", "<C-d>zz")
 keymap.set("n", "<C-u>", "<C-u>zz")
 keymap.set("n", "n", "nzzzv")
 keymap.set("n", "N", "Nzzzv")
+-- horizontal scroll
+keymap.set("n", "L", "50h")
+keymap.set("n", "R", "50l")
 
 -- paste without overwriting any buffer
 keymap.set("v", "<leader>p", "\"_dP")

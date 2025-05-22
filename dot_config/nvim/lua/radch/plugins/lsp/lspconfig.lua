@@ -2,6 +2,8 @@ return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
   dependencies = {
+    "mason-org/mason-lspconfig.nvim",
+    "WhoIsSethDaniel/mason-tool-installer.nvim",
     "saghen/blink.cmp",
     "j-hui/fidget.nvim",
     { "antosha417/nvim-lsp-file-operations", config = true },
@@ -12,16 +14,12 @@ return {
         library = {
           -- See the configuration section for more details
           -- Load luvit types when the `vim.uv` word is found
-          { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+          { path = "${3rd}/luv/library", words = { "vim%.uv" } }
         },
       },
     },
   },
   config = function()
-    local lspconfig = require("lspconfig")
-    local mason_lspconfig = require("mason-lspconfig")
-    local blink = require("blink.cmp")
-
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("UserLspConfig", {}),
       callback = function(event)
@@ -31,15 +29,18 @@ return {
         end
 
         -- set keybinds
+        -- vim.lsp.inlay_hint.enable()
+        map('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+        map('gi', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
+        map('gT', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
+        map('gR', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+        map('gI', require('telescope.builtin').diagnostics, 'Open Diagnostics')
+        map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        map('gL', vim.lsp.codelens.refresh, 'Refresh Code[L]ens')
+        map('ga', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
         map('grn', vim.lsp.buf.rename, '[R]e[n]ame')
-        map('gra', vim.lsp.buf.code_action, '[G]oto Code [A]ction', { 'n', 'x' })
-        map('grr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-        map('gri', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-        map('grd', vim.lsp.buf.definition, '[G]oto [D]efinition')
-        map('grD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         map('gO', require('telescope.builtin').lsp_document_symbols, 'Open Document Symbols')
         map('gW', require('telescope.builtin').lsp_dynamic_workspace_symbols, 'Open Workspace Symbols')
-        map('grt', require('telescope.builtin').lsp_type_definitions, '[G]oto [T]ype Definition')
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if not client then
@@ -103,9 +104,6 @@ return {
       },
     }
 
-    -- used to enable autocompletion (assign to every lsp server config)
-    local capabilities = blink.get_lsp_capabilities()
-
     local servers = {
       emmet_ls = {
         filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
@@ -121,15 +119,33 @@ return {
       }
     }
 
-    mason_lspconfig.setup_handlers({
-      function(server_name)
-        local server = servers[server_name] or {}
-        -- This handles overriding only values explicitly passed
-        -- by the server configuration above. Useful when disabling
-        -- certain features of an LSP (for example, turning off formatting for ts_ls)
-        server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-        lspconfig[server_name].setup(server)
-      end,
+    for server_name, config in pairs(servers) do
+      vim.lsp.config(server_name, config)
+    end
+
+    local mason_lspconfig = require("mason-lspconfig")
+    local mason_tool_installer = require("mason-tool-installer")
+    mason_lspconfig.setup({
+      -- list of servers for mason to install
+      ensure_installed = {
+        -- "roslyn",
+        -- "rzls",
+        "gopls",
+        "ts_ls",
+        "html",
+        "cssls",
+        "tailwindcss",
+        "lua_ls",
+        "emmet_ls",
+      },
+    })
+
+    mason_tool_installer.setup({
+      ensure_installed = {
+        "prettier", -- prettier formatter
+        "stylua",   -- lua formatter
+        "eslint_d",
+      },
     })
   end,
 }

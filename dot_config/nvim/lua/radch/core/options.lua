@@ -2,6 +2,8 @@ vim.cmd("let g:netrw_liststyle = 3")
 
 local opt = vim.opt
 
+opt.langmap = [[ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz]]
+
 opt.relativenumber = true
 opt.number = true
 
@@ -30,6 +32,7 @@ opt.inccommand = "split"
 
 opt.cursorline = true
 opt.scrolloff = 10
+opt.sidescrolloff = 40
 
 -- turn on termguicolors for colorschemes to work
 opt.termguicolors = true

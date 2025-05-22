@@ -32,7 +32,9 @@ bind -x '"\C-f": tmux-sessionizer'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias cz='chezmoi'
-alias lg='lazygit'
+alias lag='lazygit'
+alias lad='lazydocker'
+alias dl='dotnet-launcher'
 PS1='[\u@\h \W]\$ '
 
 function y() {

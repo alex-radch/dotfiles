@@ -14,7 +14,7 @@ return {
     completion = { documentation = { auto_show = false } },
 
     sources = {
-      default = { 'snippets', 'lsp', 'path' },
+      default = { 'snippets', 'lsp', 'path', 'buffer' },
     },
 
     -- turn off ghost autocompletion in cmdline
