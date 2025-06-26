@@ -19,6 +19,7 @@ bindkey -v
 
 export PATH="$HOME/.dotnet/tools:$PATH"
 export PATH="$HOME/bin:$PATH"
+export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
 export EDITOR="nvim"
 
 # Find with fzf in commands history
@@ -39,9 +40,11 @@ bindkey -s ^F "tmux-sessionizer\n"
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias cz='chezmoi'
+alias czd='chezmoi diff --reverse'
 alias lag='lazygit'
 alias lad='lazydocker'
 alias dl='dotnet-launcher'
+alias fabric='fabric-ai'
 PS1='[\u@\h \W]\$ '
 
 function y() {
@@ -51,6 +54,11 @@ function y() {
 		builtin cd -- "$cwd"
 	fi
 	rm -f -- "$tmp"
+}
+
+cursor() {
+    # Launch the system-installed cursor script in the background and disown it to prevent job control messages.
+    nohup /usr/bin/cursor "$@" >/dev/null 2>&1 & disown
 }
 
 eval "$(starship init zsh)"

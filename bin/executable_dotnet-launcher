@@ -1,32 +1,63 @@
 #!/usr/bin/env bash
 
-# === Reset Cache ===
-if [[ "$1" == "--reset" ]]; then
-  unset DOTNET_LAUNCHER_USE_WATCH
-  unset DOTNET_LAUNCHER_CS_PROJ
-  unset DOTNET_LAUNCHER_PROFILE
-  echo "Cache succesfully cleared."
+# Define cache file locations
+CACHE_DIR="/var/tmp/dotnet-launcher-cache"
+# Get current directory name to use as project identifier
+PROJECT_ID=$(basename "$(pwd)")
+CACHE_PROJECT_FILE="$CACHE_DIR/${PROJECT_ID}_project"
+CACHE_PROFILE_FILE="$CACHE_DIR/${PROJECT_ID}_profile"
+
+# Create cache directory if it doesn't exist
+mkdir -p "$CACHE_DIR"
+
+# Show help message
+show_help() {
+  echo "Usage: $(basename "$0") [OPTION]"
+  echo
+  echo "Launch a .NET project with interactive selection of project and profile."
+  echo
+  echo "Options:"
+  echo "  -h, --help    Display this help message and exit"
+  echo "  -c, --clear   Clear cached selections for current project"
+  echo "  --clearAll    Clear cached selections for all projects"
+  echo
+  echo "The script caches project and profile selections in $CACHE_DIR"
+  echo "and will use these values for subsequent runs for the current directory."
+}
+
+# === Process Command Line Arguments ===
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  show_help
   exit 0
 fi
 
-# Cache variables in terminal session
-CACHE_WATCH=${DOTNET_LAUNCHER_USE_WATCH}
-CACHE_PROJECT=${DOTNET_LAUNCHER_CS_PROJ}
-CACHE_PROFILE=${DOTNET_LAUNCHER_PROFILE}
+# === Clear All Cache ===
+if [[ "$1" == "--clearAll" ]]; then
+  rm -rf $CACHE_DIR
+  echo "All cache files successfully cleared."
+  exit 0
+fi
+
+# === Clear Cache ===
+if [[ "$1" == "-c" || "$1" == "--clear" ]]; then
+  rm -f "$CACHE_PROJECT_FILE" "$CACHE_PROFILE_FILE"
+  echo "Cache successfully cleared for project: $PROJECT_ID"
+  exit 0
+fi
+
+# Read from cache files
+CACHE_PROJECT=""
+CACHE_PROFILE=""
+[ -f "$CACHE_PROJECT_FILE" ] && CACHE_PROJECT=$(cat "$CACHE_PROJECT_FILE")
+[ -f "$CACHE_PROFILE_FILE" ] && CACHE_PROFILE=$(cat "$CACHE_PROFILE_FILE")
 
 # === Step 1: dotnet watch? ===
-if [ -z "$CACHE_WATCH" ]; then
-  read -rp "Use 'dotnet watch'? (Y/n): " use_watch
-  use_watch=${use_watch:-Y}
-  if [[ "$use_watch" =~ ^[Yy]$ ]]; then
-    DOTNET_CMD="dotnet watch"
-    export DOTNET_LAUNCHER_USE_WATCH="yes"
-  else
-    DOTNET_CMD="dotnet"
-    export DOTNET_LAUNCHER_USE_WATCH="no"
-  fi
+read -rp "Use 'dotnet watch'? (y/N): " use_watch
+use_watch=${use_watch:-N}
+if [[ "$use_watch" =~ ^[Yy]$ ]]; then
+  WATCH="yes"
 else
-  DOTNET_CMD=$([[ "$CACHE_WATCH" == "yes" ]] && echo "dotnet watch" || echo "dotnet")
+  WATCH="no"
 fi
 
 # === Step 2: Project selection ===
@@ -36,7 +67,7 @@ if [ -z "$CACHE_PROJECT" ]; then
     echo "Project not selected."
     exit 1
   fi
-  export DOTNET_LAUNCHER_CS_PROJ="$PROJECT"
+  echo "$PROJECT" > "$CACHE_PROJECT_FILE"
 else
   PROJECT="$CACHE_PROJECT"
 fi
@@ -55,13 +86,23 @@ if [ -z "$CACHE_PROFILE" ]; then
     echo "Profile not selected."
     exit 1
   fi
-  export DOTNET_LAUNCHER_PROFILE="$PROFILE"
+  echo "$PROFILE" > "$CACHE_PROFILE_FILE"
 else
   PROFILE="$CACHE_PROFILE"
 fi
 
-# === Step 4: Run command ===
-CMD="$DOTNET_CMD run --project \"$PROJECT\" --launch-profile \"$PROFILE\""
+# === Step 4: Build project ===
+CMD="dotnet build $PROJECT --verbosity detailed"
 echo "Start command: $CMD"
-eval $CMD
+if ! $CMD; then
+  exit 1
+fi
 
+# === Step 5: Run command ===
+if [[ "$WATCH" == "yes" ]]; then
+  CMD="dotnet watch run --no-hot-reload --no-build --project $PROJECT --launch-profile $PROFILE"
+else
+  CMD="dotnet run --no-build --project $PROJECT --launch-profile $PROFILE"
+fi
+echo "Start command: $CMD"
+exec $CMD

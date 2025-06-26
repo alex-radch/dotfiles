@@ -17,12 +17,12 @@ bind '"\e[B": history-search-forward'
 
 # Find with fzf in commands history
 __fzf_history_search() {
-  local selected_command
-  selected_command=$(history | fzf --tac --no-sort +s --tiebreak=index --height 50% --reverse --query="$READLINE_LINE")
-  if [ -n "$selected_command" ]; then
-    READLINE_LINE=$(echo "$selected_command" | sed 's/^[ ]*[0-9]*[ ]*//')
-    READLINE_POINT=${#READLINE_LINE}
-  fi
+    local selected_command
+    selected_command=$(history | fzf --tac --no-sort +s --tiebreak=index --height 50% --reverse --query="$READLINE_LINE")
+    if [ -n "$selected_command" ]; then
+        READLINE_LINE=$(echo "$selected_command" | sed 's/^[ ]*[0-9]*[ ]*//')
+        READLINE_POINT=${#READLINE_LINE}
+    fi
 }
 
 # Call Ctrl+R for fzf history find
@@ -38,12 +38,17 @@ alias dl='dotnet-launcher'
 PS1='[\u@\h \W]\$ '
 
 function y() {
-	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
-	yazi "$@" --cwd-file="$tmp"
-	if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
-		builtin cd -- "$cwd"
-	fi
-	rm -f -- "$tmp"
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(command cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+cursor() {
+    # Launch the system-installed cursor script in the background and disown it to prevent job control messages.
+    nohup /usr/bin/cursor "$@" >/dev/null 2>&1 & disown
 }
 
 eval "$(starship init bash)"
