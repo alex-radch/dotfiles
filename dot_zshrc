@@ -45,6 +45,7 @@ alias lag='lazygit'
 alias lad='lazydocker'
 alias dl='dotnet-launcher'
 alias fabric='fabric-ai'
+alias telos='cat telos.md | sed "1d;\$d" | age -d'
 PS1='[\u@\h \W]\$ '
 
 function y() {
