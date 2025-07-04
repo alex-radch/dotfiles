@@ -1,0 +1,200 @@
+#!/usr/bin/env bash
+
+# Define cache file locations
+CACHE_DIR="/var/tmp/dotnet-ef-launcher-cache"
+# Get current directory name to use as project identifier
+PROJECT_ID=$(basename "$(pwd)")
+CACHE_TARGET_PROJECT_FILE="$CACHE_DIR/${PROJECT_ID}_target_project"
+CACHE_STARTUP_PROJECT_FILE="$CACHE_DIR/${PROJECT_ID}_startup_project"
+CACHE_CONTEXT_FILE="$CACHE_DIR/${PROJECT_ID}_context"
+
+# Create cache directory if it doesn't exist
+mkdir -p "$CACHE_DIR"
+
+# Show help message
+show_help() {
+  echo "Usage: $(basename "$0") [OPTION]"
+  echo
+  echo "Launch dotnet ef commands with interactive selection of project, startup project, and context."
+  echo
+  echo "Options:"
+  echo "  -h, --help    Display this help message and exit"
+  echo "  -c, --clear   Clear cached selections for current project"
+  echo "  --clearAll    Clear cached selections for all projects"
+  echo
+  echo "The script caches project selections in $CACHE_DIR"
+  echo "and will use these values for subsequent runs for the current directory."
+}
+
+# === Process Command Line Arguments ===
+if [[ "$1" == "-h" || "$1" == "--help" ]]; then
+  show_help
+  exit 0
+fi
+
+# === Clear All Cache ===
+if [[ "$1" == "--clearAll" ]]; then
+  rm -rf $CACHE_DIR
+  echo "All cache files successfully cleared."
+  exit 0
+fi
+
+# === Clear Cache ===
+if [[ "$1" == "-c" || "$1" == "--clear" ]]; then
+  rm -f "$CACHE_TARGET_PROJECT_FILE" "$CACHE_STARTUP_PROJECT_FILE" "$CACHE_CONTEXT_FILE"
+  echo "Cache successfully cleared for project: $PROJECT_ID"
+  exit 0
+fi
+
+# Read from cache files
+CACHE_TARGET_PROJECT=""
+CACHE_STARTUP_PROJECT=""
+CACHE_CONTEXT=""
+[ -f "$CACHE_TARGET_PROJECT_FILE" ] && CACHE_TARGET_PROJECT=$(cat "$CACHE_TARGET_PROJECT_FILE")
+[ -f "$CACHE_STARTUP_PROJECT_FILE" ] && CACHE_STARTUP_PROJECT=$(cat "$CACHE_STARTUP_PROJECT_FILE")
+[ -f "$CACHE_CONTEXT_FILE" ] && CACHE_CONTEXT=$(cat "$CACHE_CONTEXT_FILE")
+
+# === Step 1: Select target project (project with context) ===
+if [ -z "$CACHE_TARGET_PROJECT" ]; then
+  echo "Searching for .csproj files..."
+  PROJECT_DIRS=$(find . -name '*.csproj' -exec dirname {} \; | sort | uniq)
+  if [ -z "$PROJECT_DIRS" ]; then
+    echo "No .csproj files found."
+    exit 1
+  fi
+  TARGET_PROJECT=$(echo "$PROJECT_DIRS" | fzf --prompt="Select target project (with context): ")
+  if [ -z "$TARGET_PROJECT" ]; then
+    echo "Target project not selected."
+    exit 1
+  fi
+  echo "$TARGET_PROJECT" > "$CACHE_TARGET_PROJECT_FILE"
+else
+  TARGET_PROJECT="$CACHE_TARGET_PROJECT"
+fi
+
+# === Step 2: Select startup project ===
+if [ -z "$CACHE_STARTUP_PROJECT" ]; then
+  echo "Searching for .csproj files..."
+  PROJECT_DIRS=$(find . -name '*.csproj' -exec dirname {} \; | sort | uniq)
+  if [ -z "$PROJECT_DIRS" ]; then
+    echo "No .csproj files found."
+    exit 1
+  fi
+  STARTUP_PROJECT=$(echo "$PROJECT_DIRS" | fzf --prompt="Select startup project: ")
+  if [ -z "$STARTUP_PROJECT" ]; then
+    echo "Startup project not selected."
+    exit 1
+  fi
+  echo "$STARTUP_PROJECT" > "$CACHE_STARTUP_PROJECT_FILE"
+else
+  STARTUP_PROJECT="$CACHE_STARTUP_PROJECT"
+fi
+
+# === Step 3: Select context ===
+if [ -z "$CACHE_CONTEXT" ]; then
+  echo "Getting available contexts..."
+  CONTEXTS_OUTPUT=$(dotnet ef dbcontext list --project "$TARGET_PROJECT" --startup-project "$STARTUP_PROJECT" --no-build 2>&1)
+  if [ $? -ne 0 ]; then
+    echo "Failed to get contexts. Error output:"
+    echo "$CONTEXTS_OUTPUT"
+    exit 1
+  fi
+  
+  # Extract context names from output (assuming each context is on a separate line)
+  CONTEXTS=$(echo "$CONTEXTS_OUTPUT" | grep -v "^Build succeeded" | grep -v "^[[:space:]]*$" | grep -v "warnings" | grep -v "errors")
+  if [ -z "$CONTEXTS" ]; then
+    echo "No contexts found."
+    exit 1
+  fi
+  
+  CONTEXT=$(echo "$CONTEXTS" | fzf --prompt="Select context: ")
+  if [ -z "$CONTEXT" ]; then
+    echo "Context not selected."
+    exit 1
+  fi
+  echo "$CONTEXT" > "$CACHE_CONTEXT_FILE"
+else
+  CONTEXT="$CACHE_CONTEXT"
+fi
+
+# === Step 4: Select EF command ===
+COMMANDS="migrations add
+migrations script
+migrations remove
+database update"
+
+SELECTED_COMMAND=$(echo "$COMMANDS" | fzf --prompt="Select EF command: ")
+if [ -z "$SELECTED_COMMAND" ]; then
+  echo "Command not selected."
+  exit 1
+fi
+
+# === Step 5: Handle specific command logic ===
+BASE_FLAGS="--context $CONTEXT --project $TARGET_PROJECT --startup-project $STARTUP_PROJECT"
+
+case "$SELECTED_COMMAND" in
+  "migrations add")
+    read -rp "Enter migration name: " MIGRATION_NAME
+    if [ -z "$MIGRATION_NAME" ]; then
+      echo "Migration name is required."
+      exit 1
+    fi
+    FINAL_CMD="dotnet ef migrations add \"$MIGRATION_NAME\" $BASE_FLAGS"
+    ;;
+  "migrations script")
+    read -rp "Enter FROM migration name: " FROM_MIGRATION
+    if [ -z "$FROM_MIGRATION" ]; then
+      echo "FROM migration name is required."
+      exit 1
+    fi
+    
+    read -rp "Enter TO migration name (optional, leave empty for latest): " TO_MIGRATION
+    
+    read -rp "Make script idempotent? (y/N): " IDEMPOTENT
+    IDEMPOTENT=${IDEMPOTENT:-N}
+    
+    read -rp "Enter output file name (without .sql extension): " OUTPUT_FILE
+    if [ -z "$OUTPUT_FILE" ]; then
+      echo "Output file name is required."
+      exit 1
+    fi
+    
+    # Build command parts
+    SCRIPT_CMD="dotnet ef migrations script \"$FROM_MIGRATION\""
+    
+    if [ -n "$TO_MIGRATION" ]; then
+      SCRIPT_CMD="$SCRIPT_CMD \"$TO_MIGRATION\""
+    fi
+    
+    if [[ "$IDEMPOTENT" =~ ^[Yy]$ ]]; then
+      SCRIPT_CMD="$SCRIPT_CMD --idempotent"
+    fi
+    
+    SCRIPT_CMD="$SCRIPT_CMD --output \"${OUTPUT_FILE}.sql\" $BASE_FLAGS"
+    FINAL_CMD="$SCRIPT_CMD"
+    ;;
+  "database update")
+    read -rp "Enter target migration name (optional, leave empty to update to latest): " TARGET_MIGRATION
+    if [ -n "$TARGET_MIGRATION" ]; then
+      FINAL_CMD="dotnet ef database update \"$TARGET_MIGRATION\" $BASE_FLAGS"
+    else
+      FINAL_CMD="dotnet ef database update $BASE_FLAGS"
+    fi
+    ;;
+  *)
+    FINAL_CMD="dotnet ef $SELECTED_COMMAND $BASE_FLAGS"
+    ;;
+esac
+
+# === Step 6: Execute command ===
+echo
+echo "Selected configuration:"
+echo "  Target project: $TARGET_PROJECT"
+echo "  Startup project: $STARTUP_PROJECT"
+echo "  Context: $CONTEXT"
+echo "  Command: $SELECTED_COMMAND"
+echo
+echo "Executing command: $FINAL_CMD"
+echo
+
+eval $FINAL_CMD 
