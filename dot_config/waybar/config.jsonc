@@ -189,6 +189,6 @@
     "tooltip": false,
     "interval": 1,
     "format": "{:%d.%m.%Y %H:%M:%S}",
-    "on-click": "hyprctl dispatch -- exec [float\\; size 900 480\\;move onscreen cursor 50% 50%] ghostty -e calcurse"
+    "on-click": "hyprctl dispatch -- exec [float\\;pin\\;size 900 480\\;move onscreen cursor 50% 50%] ghostty -e calcurse"
   }
 }

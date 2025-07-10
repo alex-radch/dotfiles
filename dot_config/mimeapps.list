@@ -12,6 +12,7 @@ image/png=nsxiv.desktop
 image/jpeg=nsxiv.desktop
 image/jpg=nsxiv.desktop
 image/gif=nsxiv.desktop
+x-scheme-handler/bruno=bruno.desktop
 
 [Added Associations]
 x-scheme-handler/tonsite=org.telegram.desktop.desktop;
