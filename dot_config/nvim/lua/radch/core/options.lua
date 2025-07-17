@@ -15,6 +15,7 @@ opt.autoindent = true -- copy indent from current line when starting new one
 
 opt.list = true
 opt.listchars = { space = "·", tab = "→ ", extends = "⫸", precedes = "⫷" }
+opt.fillchars:append({ diff = "╱" })
 
 opt.wrap = false -- dont wrap line
 

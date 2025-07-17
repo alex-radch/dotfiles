@@ -1,0 +1,19 @@
+#!/bin/bash
+
+CURRENT_FORMAT=$(hyprctl monitors | awk -v mon="$MONITOR_NAME" '
+    $0 ~ "Monitor "mon {
+        in_monitor=1
+    }
+    in_monitor && /currentFormat:/ {
+        print $2
+        exit
+    }')
+
+if [[ "$CURRENT_FORMAT" == "XRGB8888" ]]; then
+    NEW_BITDEPTH="10"
+else
+    NEW_BITDEPTH="8"
+fi
+
+hyprctl keyword monitor ",highres,auto,1,bitdepth,$NEW_BITDEPTH"
+notify-send "Hyprland" "Switched to ${NEW_BITDEPTH}-bit color"

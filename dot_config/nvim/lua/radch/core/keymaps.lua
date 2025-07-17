@@ -6,6 +6,9 @@ local keymap = vim.keymap
 -- clear highlights on search when pressing <Esc> in normal mode
 keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>", { desc = "Clear search highlights" })
 
+-- fix change keyboard language print in insert mode
+keymap.set("i", "<D-Space>", "<Nop>")
+
 -- move lines in visual mode up and down
 keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 keymap.set("v", "K", ":m '<-2<CR>gv=gv")
@@ -47,6 +50,32 @@ keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" 
 keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
 keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
 keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>", { desc = "Open current buffer in new tab" })
+-- create new tab with 2 buffers with diff2, and dont require save them when quit project
+keymap.set("n", "<leader>gt", function()
+  vim.cmd("tabnew")
+  vim.cmd("vsplit")
+
+  -- Left buffer (scratch)
+  vim.cmd("enew")
+  vim.bo.buftype = "nofile"
+  vim.bo.bufhidden = "wipe"
+  vim.bo.swapfile = false
+
+  vim.cmd("wincmd w")
+
+  -- Right buffer (scratch)
+  vim.cmd("enew")
+  vim.bo.buftype = "nofile"
+  vim.bo.bufhidden = "wipe"
+  vim.bo.swapfile = false
+
+  -- Enable diff mode
+  vim.cmd("wincmd h")
+  vim.cmd("diffthis")
+  vim.cmd("wincmd w")
+  vim.cmd("diffthis")
+  vim.cmd("wincmd h")
+end, { desc = "Open new tab for diff2 vertically" })
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
