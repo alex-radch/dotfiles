@@ -53,13 +53,13 @@ window#waybar {
     min-width: 50px;
     background-size: 400% 400%;
 }
-#cpu, #memory, #pulseaudio, #network, #battery, #language,
+#cpu, #memory, #pulseaudio, #network, #battery, #language, #custom-notification,
 #tray, #custom-playerctl.backward, #custom-playerctl.play, #custom-playerctl.forward, #custom-playerlabel {
     background: @bg;
     font-weight: bold;
     margin: 5px 0px;
 }
-#cpu, #memory, #pulseaudio, #network, #battery, #language {
+#cpu, #memory, #pulseaudio, #network, #battery, #language, #custom-notification {
     color: @text;
     border-radius: 10px 25px 10px 25px;
     padding: 0 20px;
@@ -88,6 +88,9 @@ window#waybar {
     padding: 0px 30px 0px 15px;
     font-size: 28px;
 }
+#custom-notification {
+    min-width: 20px;
+}
 #language {
     color: @peach;
     min-width: 35px;
@@ -111,7 +114,7 @@ window#waybar {
     background: @bg;
     font-size: 22px;
 }
-#custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.forward:hover{
+#custom-playerctl.backward:hover, #custom-playerctl.play:hover, #custom-playerctl.forward:hover {
     color: @peach;
 }
 #custom-playerctl.backward {
@@ -131,7 +134,7 @@ window#waybar {
     padding-left: 10px;
     padding-right: 26px;
 }
-#window{
+#window {
     background: @bg;
     padding-left: 15px;
     padding-right: 15px;
