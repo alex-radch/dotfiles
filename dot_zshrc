@@ -20,6 +20,7 @@ bindkey -v
 export PATH="$HOME/.dotnet/tools:$PATH"
 export PATH="$HOME/bin:$PATH"
 export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
+export PATH="$HOME/.config/emacs/bin:$PATH"
 export EDITOR="nvim"
 
 # Find with fzf in commands history
@@ -65,4 +66,4 @@ cursor() {
 
 eval "$(starship init zsh)"
 
-fastfetch
+# fastfetch

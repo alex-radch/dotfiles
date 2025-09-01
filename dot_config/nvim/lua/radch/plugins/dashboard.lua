@@ -2,11 +2,12 @@ return {
   'nvimdev/dashboard-nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
   event = 'VimEnter',
+  enabled = false,
   config = function()
     require('dashboard').setup {
       config = {
         theme = "hyper",
-        disable_move = true,
+        disable_move = false,
         header = {
           [[                                                                       ]],
           [[                                                                     ]],

@@ -1,6 +1,14 @@
 font-family = "CaskaydiaMono Nerd Font"
 font-size = 20
 
-theme = catppuccin-mocha
+theme = Kanagawa Wave
 
 confirm-close-surface=false
+keybind = shift+enter=text:\n
+
+# Shader configurations
+# Uncomment one of the following lines to enable a shader:
+# custom-shader = ~/.config/ghostty/shaders/glow-rgbsplit-twitchy.glsl
+# custom-shader = ~/.config/ghostty/shaders/wave.glsl
+# custom-shader = ~/.config/ghostty/shaders/glitch.glsl
+# custom-shader = ~/.config/ghostty/shaders/neon.glsl

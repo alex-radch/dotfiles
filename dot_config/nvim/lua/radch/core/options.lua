@@ -4,7 +4,7 @@ local opt = vim.opt
 
 opt.langmap = [[ФИСВУАПРШОЛДЬТЩЗЙКЫЕГМЦЧНЯ;ABCDEFGHIJKLMNOPQRSTUVWXYZ,фисвуапршолдьтщзйкыегмцчня;abcdefghijklmnopqrstuvwxyz]]
 
-opt.relativenumber = true
+opt.relativenumber = false
 opt.number = true
 
 -- tabs and indentation
@@ -13,7 +13,8 @@ opt.shiftwidth = 4 -- 4 spaces for indent width
 opt.expandtab = true -- expand tab to spaces
 opt.autoindent = true -- copy indent from current line when starting new one
 
-opt.list = true
+opt.winborder = "rounded"
+opt.list = false
 opt.listchars = { space = "·", tab = "→ ", extends = "⫸", precedes = "⫷" }
 opt.fillchars:append({ diff = "╱" })
 
@@ -43,9 +44,6 @@ opt.signcolumn = "yes" -- Keep signcolumn on by default on the left sidebar - gi
 -- Decrease update time
 opt.updatetime = 50
 
--- Displays which-key popup sooner
-opt.timeoutlen = 300
-
 -- backspace
 opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or insert mode start position
 
@@ -55,5 +53,4 @@ opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or 
 -- split windows
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
-
 
