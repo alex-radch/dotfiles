@@ -49,3 +49,4 @@
 ;; (unpin! t)
 
 (package! kanagawa-themes)
+(package! harpoon)

@@ -1,5 +1,5 @@
 font-family = "CaskaydiaMono Nerd Font"
-font-size = 20
+font-size = 18
 
 theme = Kanagawa Wave
 
@@ -11,4 +11,4 @@ keybind = shift+enter=text:\n
 # custom-shader = ~/.config/ghostty/shaders/glow-rgbsplit-twitchy.glsl
 # custom-shader = ~/.config/ghostty/shaders/wave.glsl
 # custom-shader = ~/.config/ghostty/shaders/glitch.glsl
-# custom-shader = ~/.config/ghostty/shaders/neon.glsl
+custom-shader = ~/.config/ghostty/shaders/cursor_blaze.glsl

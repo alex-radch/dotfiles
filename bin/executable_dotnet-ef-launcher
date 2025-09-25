@@ -139,7 +139,15 @@ case "$SELECTED_COMMAND" in
       echo "Migration name is required."
       exit 1
     fi
-    FINAL_CMD="dotnet ef migrations add \"$MIGRATION_NAME\" $BASE_FLAGS"
+    
+    read -rp "Enter migrations directory (optional, hint: Data/Migrations): " MIGRATIONS_DIR
+    
+    OUTPUT_DIR_FLAG=""
+    if [ -n "$MIGRATIONS_DIR" ]; then
+      OUTPUT_DIR_FLAG="--output-dir \"$MIGRATIONS_DIR\""
+    fi
+    
+    FINAL_CMD="dotnet ef migrations add \"$MIGRATION_NAME\" $OUTPUT_DIR_FLAG $BASE_FLAGS"
     ;;
   "migrations script")
     read -rp "Enter FROM migration name: " FROM_MIGRATION

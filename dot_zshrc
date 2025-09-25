@@ -7,9 +7,9 @@ autoload -Uz compinit
 compinit
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
-HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
+export HISTFILE=~/.histfile
+export HISTSIZE=1000
+export SAVEHIST=1000
 bindkey -v
 # End of lines configured by zsh-newuser-install
 
@@ -38,8 +38,9 @@ bindkey ^R __fzf_history_search
 
 bindkey -s ^F "tmux-sessionizer\n"
 
-alias ls='ls --color=auto'
+alias ls='ls -lah --group-directories-first --color=auto --time-style="+%d.%m.%Y %H:%M:%S"'
 alias grep='grep --color=auto'
+alias ff='fastfetch'
 alias cz='chezmoi'
 alias czd='chezmoi diff --reverse'
 alias lag='lazygit'

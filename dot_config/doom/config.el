@@ -22,7 +22,8 @@
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
 ;; `load-theme' function. This is the default:
-(load-theme 'kanagawa-wave t)
+;; (load-theme 'kanagawa-wave t)
+(setq doom-theme 'doom-tomorrow-night)
 
 (setq doom-font (font-spec :family "CaskaydiaMono Nerd Font" :size 22))
      ;; doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
@@ -65,7 +66,7 @@
 (setq org-modern-table t)
 
 (custom-theme-set-faces!
-'doom-one
+'doom-tomorrow-night
 '(org-level-4 :inherit outline-3 :height 1.3)
 '(org-level-3 :inherit outline-3 :height 1.4)
 '(org-level-2 :inherit outline-2 :height 1.5)
@@ -74,3 +75,29 @@
 
 (setq display-line-numbers-type t)
 (setq confirm-kill-emacs nil)
+
+(after! projectile
+  (setq projectile-project-search-path '("~/work" "~/personal")))
+
+(after! neotree
+  (setq neo-theme (if (display-graphic-p) 'nerd-icons 'arrow)))
+
+(after! good-scroll
+  (setq good-scroll-render-rate 0.01 good-scroll-duration 0.07))
+
+(after! magit
+  (setq magit-status-show-untracked-files 'all))
+
+;; (after! vertico
+;;   (setq completion-styles '(orderless)
+;;         completion-category-defaults nil
+;;         completion-category-overrides '((file (styles partial-completion)))))
+
+;; (map! :n "C-e" #'harpoon-quick-menu-hydra)
+;; (map! :leader "j c" #'harpoon-clear)
+(map! :leader "A" #'harpoon-add-file)
+(map! :n "C-e" #'harpoon-toggle-file)
+(map! :leader "C-j" #'harpoon-go-to-1)
+(map! :leader "C-k" #'harpoon-go-to-2)
+(map! :leader "C-l" #'harpoon-go-to-3)
+(map! :leader "C-;" #'harpoon-go-to-4)

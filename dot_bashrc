@@ -2,13 +2,26 @@
 # ~/.bashrc
 #
 
-set -o vi
+# set -o vi
+
+export HISTFILE=~/.histfile
+export HISTSIZE=10000
+export HISTCONTROL="erasedups:ignorespace"
 
 # If not running interactively, don't do anything
 [[ $- != *i* ]] && return
 
+# Completion
+set show-all-if-ambiguous on
+if [[ -r /usr/share/bash-completion/bash_completion ]]; then
+  . /usr/share/bash-completion/bash_completion
+fi
+
+
 export PATH="$HOME/.dotnet/tools:$PATH"
 export PATH="$HOME/bin:$PATH"
+export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
+export PATH="$HOME/.config/emacs/bin:$PATH"
 export EDITOR="nvim"
 
 # Find in history with arrows by part of command
@@ -29,12 +42,17 @@ __fzf_history_search() {
 bind -x '"\C-r": __fzf_history_search'
 bind -x '"\C-f": tmux-sessionizer'
 
-alias ls='ls --color=auto'
+alias ls='ls -lah --group-directories-first --color=auto --time-style="+%d.%m.%Y %H:%M:%S"'
 alias grep='grep --color=auto'
+alias ff='fastfetch'
 alias cz='chezmoi'
+alias czd='chezmoi diff --reverse'
 alias lag='lazygit'
 alias lad='lazydocker'
 alias dl='dotnet-launcher'
+alias dlef='dotnet-ef-launcher'
+alias fabric='fabric-ai'
+alias telos='cat telos.md | sed "1d;\$d" | age -d'
 PS1='[\u@\h \W]\$ '
 
 function y() {
@@ -53,4 +71,4 @@ cursor() {
 
 eval "$(starship init bash)"
 
-fastfetch
+# fastfetch
