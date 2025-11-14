@@ -116,6 +116,8 @@ return {
             },
           },
         },
+      },
+      laravel_ls = {
       }
     }
 

@@ -86,12 +86,8 @@
   (setq good-scroll-render-rate 0.01 good-scroll-duration 0.07))
 
 (after! magit
+  (setq magit-diff-hide-trailing-cr-characters t)
   (setq magit-status-show-untracked-files 'all))
-
-;; (after! vertico
-;;   (setq completion-styles '(orderless)
-;;         completion-category-defaults nil
-;;         completion-category-overrides '((file (styles partial-completion)))))
 
 ;; (map! :n "C-e" #'harpoon-quick-menu-hydra)
 ;; (map! :leader "j c" #'harpoon-clear)

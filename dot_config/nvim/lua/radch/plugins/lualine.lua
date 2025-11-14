@@ -76,7 +76,7 @@ return {
         lualine_b = { 'branch', 'diagnostics' },
         lualine_c = { { 'filename', path = 1 } }, -- 1: Relative path
         lualine_x = { { 'encoding', show_bomb = true, on_click = function() encoding_click() end }, { 'fileformat', on_click = function() fileformat_click() end }, 'filetype' },
-        lualine_y = { 'lsp_status' },
+        -- lualine_y = { 'lsp_status' }, -- this shit doesnt work with roslyn
         lualine_z = { 'location', 'searchcount' }
       },
     })
