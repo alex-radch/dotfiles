@@ -1,18 +1,26 @@
+[Added Associations]
+image/gif=io.github.celluloid_player.Celluloid.desktop;
+inode/directory=org.gnome.Nautilus.desktop;
+video/x-matroska=vlc.desktop;
+x-scheme-handler/tonsite=org.telegram.desktop.desktop;
+video/mp4=vlc.desktop;
+
 [Default Applications]
-x-scheme-handler/tonsite=org.telegram.desktop.desktop
-text/html=google-chrome.desktop
-x-scheme-handler/http=google-chrome.desktop
-x-scheme-handler/https=google-chrome.desktop
-x-scheme-handler/about=google-chrome.desktop
-x-scheme-handler/unknown=google-chrome.desktop
+image/gif=io.github.celluloid_player.Celluloid.desktop
 image/heic=nsxiv.desktop
 image/heif=nsxiv.desktop
-image/webp=nsxiv.desktop
-image/png=nsxiv.desktop
 image/jpeg=nsxiv.desktop
 image/jpg=nsxiv.desktop
-image/gif=nsxiv.desktop
+image/png=nsxiv.desktop
+image/webp=nsxiv.desktop
+inode/directory=org.gnome.Nautilus.desktop;
+text/html=google-chrome.desktop
+video/x-matroska=vlc.desktop
+x-scheme-handler/about=google-chrome.desktop
 x-scheme-handler/bruno=bruno.desktop
-
-[Added Associations]
-x-scheme-handler/tonsite=org.telegram.desktop.desktop;
+x-scheme-handler/http=google-chrome.desktop
+x-scheme-handler/https=google-chrome.desktop
+x-scheme-handler/tonsite=org.telegram.desktop.desktop
+x-scheme-handler/unknown=google-chrome.desktop
+x-scheme-handler/lmstudio=lmstudio.desktop
+video/mp4=vlc.desktop

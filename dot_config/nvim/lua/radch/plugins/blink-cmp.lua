@@ -1,20 +1,22 @@
 return {
-  'saghen/blink.cmp',
-  dependencies = { 'rafamadriz/friendly-snippets' },
+  "saghen/blink.cmp",
+  dependencies = { "rafamadriz/friendly-snippets" },
   -- use a release tag to download pre-built binaries
-  version = '1.*',
+  version = "1.*",
 
   opts = {
-    keymap = { preset = 'default' },
+    keymap = { preset = "default" },
     appearance = {
-      nerd_font_variant = 'mono'
+      nerd_font_variant = "mono",
     },
 
-    -- (Default) Only show the documentation popup when manually triggered
-    completion = { documentation = { auto_show = false } },
+    completion = {
+      documentation = { auto_show = true, auto_show_delay_ms = 200 },
+      list = { selection = { preselect = true, auto_insert = false } },
+    },
 
     sources = {
-      default = { 'snippets', 'lsp', 'path', 'buffer' },
+      default = { "snippets", "lsp", "path", "buffer" },
     },
 
     -- turn off ghost autocompletion in cmdline
@@ -26,7 +28,7 @@ return {
     -- Automatically triggered when typing trigger characters, defined by the LSP, such as `(` for `lua`. The menu will be updated when pressing a retrigger character, such as `,`
     signature = {
       enabled = true,
-      window = { show_documentation = false }
-    }
+      window = { show_documentation = false },
+    },
   },
 }

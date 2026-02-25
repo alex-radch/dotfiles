@@ -5,10 +5,11 @@ return {
 
     conform.setup({
       formatters_by_ft = {
+        go = { "golangci-lint" },
         javascript = { "prettier" },
         typescript = { "prettier" },
-        -- lua = { "stylua" },
-        ["_"] = { "default_indent", lsp_format = "prefer" }
+        lua = { "stylua" },
+        ["_"] = { "default_indent", lsp_format = "prefer" },
       },
       formatters = {
         -- Custom formatter to auto indent buffer.
@@ -17,15 +18,14 @@ return {
         default_indent = {
           format = function(_, ctx, _, callback)
             -- no range, use whole buffer otherwise use selection
-            local cmd = ctx.range == nil and 'gg=G' or '='
-            vim.cmd.normal({ 'm`' .. cmd .. '``', bang = true })
+            local cmd = ctx.range == nil and "gg=G" or "="
+            vim.cmd.normal({ "m`" .. cmd .. "``", bang = true })
             callback()
           end,
         },
-      }
+      },
     })
 
-    vim.keymap.set("n", "<leader>fd", function() require("conform").format({ async = true }) end,
-      { desc = "Format document" })
-  end
+    vim.keymap.set({ "n", "v" }, "<leader>fd", function() require("conform").format({ async = true }) end, { desc = "Format document" })
+  end,
 }

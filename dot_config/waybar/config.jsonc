@@ -12,12 +12,12 @@
     "custom/playerctl#backward",
     "custom/playerctl#play",
     "custom/playerctl#forward"
-    /*"custom/playerlabel"*/
+    // "custom/playerlabel"
   ],
   "modules-center": [
-    /*"cava#left",*/
+    // "cava#left",
     "hyprland/workspaces"
-    /*"cava#right"*/
+    // "cava#right"
   ],
   "modules-right": [
     "cpu",
@@ -113,12 +113,12 @@
   "custom/playerctl#backward": {
     "tooltip": false,
     "format": "󰙣",
-    "on-click": "playerctl previous",
+    "on-click": "playerctl previous"
   },
   "custom/playerctl#forward": {
     "tooltip": false,
     "format": "󰙡",
-    "on-click": "playerctl next",
+    "on-click": "playerctl next"
   },
   "custom/playerctl#play": {
     "tooltip": false,
@@ -136,7 +136,7 @@
     "tooltip": false,
     "exec": "playerctl metadata --format '{\"text\": \"{{artist}} - {{markup_escape(title)}}\", \"tooltip\": \"{{playerName}} : {{markup_escape(title)}}\", \"alt\": \"{{status}}\", \"class\": \"{{status}}\"}' -F",
     "format": "<span>󰎈 {} 󰎈</span>",
-    "max-length": 40,
+    "max-length": 60,
     "return-type": "json"
   },
   "custom/notification": {

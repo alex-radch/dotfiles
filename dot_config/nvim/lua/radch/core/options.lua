@@ -15,7 +15,12 @@ opt.autoindent = true -- copy indent from current line when starting new one
 
 opt.winborder = "rounded"
 opt.list = false
-opt.listchars = { space = "·", tab = "→ ", extends = "⫸", precedes = "⫷" }
+opt.listchars = {
+  space = "·",
+  tab = "→ ",
+  extends = "⫸",
+  precedes = "⫷",
+}
 opt.fillchars:append({ diff = "╱" })
 
 opt.wrap = false -- dont wrap line
@@ -34,7 +39,7 @@ opt.inccommand = "split"
 
 opt.cursorline = true
 opt.scrolloff = 10
-opt.sidescrolloff = 40
+-- opt.sidescrolloff = 20
 
 -- turn on termguicolors for colorschemes to work
 opt.termguicolors = true
@@ -53,4 +58,3 @@ opt.backspace = "indent,eol,start" -- allow backspace on indent, end of line or 
 -- split windows
 opt.splitright = true -- split vertical window to the right
 opt.splitbelow = true -- split horizontal window to the bottom
-

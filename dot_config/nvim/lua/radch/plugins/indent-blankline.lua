@@ -4,6 +4,6 @@ return {
   main = "ibl",
   opts = {
     indent = { char = "┊" },
-    whitespace = { remove_blankline_trail = false }
-  }
+    whitespace = { remove_blankline_trail = false },
+  },
 }

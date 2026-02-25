@@ -49,36 +49,32 @@ return {
     local function encoding_click()
       local encodings = { "utf-8", "utf-8-bom", "windows-1251" }
       vim.ui.select(encodings, { prompt = "Select encoding:" }, function(choice)
-        if choice then
-          set_encoding(choice)
-        end
+        if choice then set_encoding(choice) end
       end)
     end
 
     local function fileformat_click()
       local line_endings = { "LF", "CRLF" }
       vim.ui.select(line_endings, { prompt = "Select encoding:" }, function(choice)
-        if choice then
-          set_fileformat(choice)
-        end
+        if choice then set_fileformat(choice) end
       end)
     end
 
     require("lualine").setup({
       options = {
         icons_enabled = true,
-        theme = 'auto',
-        component_separators = { left = '|', right = '|' },
-        section_separators = { left = '', right = '' },
+        theme = "auto",
+        component_separators = { left = "|", right = "|" },
+        section_separators = { left = "", right = "" },
       },
       sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'branch', 'diagnostics' },
-        lualine_c = { { 'filename', path = 1 } }, -- 1: Relative path
-        lualine_x = { { 'encoding', show_bomb = true, on_click = function() encoding_click() end }, { 'fileformat', on_click = function() fileformat_click() end }, 'filetype' },
+        lualine_a = { "mode" },
+        lualine_b = { "branch", "diagnostics" },
+        lualine_c = { { "filename", path = 1 } }, -- 1: Relative path
+        lualine_x = { { "encoding", show_bomb = true, on_click = function() encoding_click() end }, { "fileformat", on_click = function() fileformat_click() end }, "filetype" },
         -- lualine_y = { 'lsp_status' }, -- this shit doesnt work with roslyn
-        lualine_z = { 'location', 'searchcount' }
+        lualine_z = { "location", "searchcount" },
       },
     })
-  end
+  end,
 }

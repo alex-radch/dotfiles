@@ -23,18 +23,18 @@ keymap.set("n", "<C-u>", "<C-u>zz")
 keymap.set("n", "n", "nzzzv")
 keymap.set("n", "N", "Nzzzv")
 -- horizontal scroll
-keymap.set("n", "L", "50h")
-keymap.set("n", "R", "50l")
+keymap.set("n", "L", "30zl")
+keymap.set("n", "H", "30zh")
 
 -- paste without overwriting any buffer
-keymap.set("v", "<leader>p", "\"_dP")
+keymap.set("v", "<leader>p", '"_dP')
 -- delete without overwriting any buffer
-keymap.set("n", "<leader>d", "\"_d")
-keymap.set("v", "<leader>d", "\"_d")
+keymap.set("n", "<leader>d", '"_d')
+keymap.set("v", "<leader>d", '"_d')
 -- copy to system clipboard
-keymap.set("n", "<leader>y", "\"+y")
-keymap.set("v", "<leader>y", "\"+y")
-keymap.set("n", "<leader>Y", "\"+Y")
+keymap.set("n", "<leader>y", '"+y')
+keymap.set("v", "<leader>y", '"+y')
+keymap.set("n", "<leader>Y", '"+Y')
 
 keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
@@ -83,7 +83,5 @@ end, { desc = "Open new tab for diff2 vertically" })
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
   group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
-  callback = function()
-    vim.highlight.on_yank()
-  end,
+  callback = function() vim.highlight.on_yank() end,
 })

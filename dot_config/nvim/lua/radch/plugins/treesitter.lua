@@ -28,7 +28,7 @@ return {
         "markdown_inline",
         "dockerfile",
         "gitignore",
-        "vimdoc"
+        "vimdoc",
       },
       auto_install = false,
       highlight = {
@@ -54,5 +54,5 @@ return {
       --   },
       -- },
     })
-  end
+  end,
 }
