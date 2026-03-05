@@ -4,6 +4,49 @@ return {
     "j-hui/fidget.nvim",
   },
   config = function()
+    vim.g.dotnet_errors_only = true
+    vim.g.dotnet_show_project_file = false
+
+    vim.keymap.set("n", "<leader>bu", function()
+      print("dotnet build started")
+
+      vim.cmd("compiler dotnet")
+      vim.cmd("silent make")
+
+      local qf = vim.fn.getqflist({ size = 0 })
+      if qf.size > 0 then
+        print("dotnet build failed")
+        vim.cmd("copen")
+      else
+        print("dotnet build succeeded")
+      end
+    end, { desc = "C# run build" })
+
+    vim.keymap.set("n", "<leader>bt", function()
+      print("dotnet test started")
+
+      vim.cmd("compiler dotnet")
+
+      local old_makeprg = vim.o.makeprg
+      local old_efm = vim.o.errorformat
+
+      vim.o.makeprg = "dotnet test -v m"
+      vim.opt.errorformat:prepend("%E%.%# in %f:line %l")
+
+      vim.cmd("silent make")
+
+      vim.o.makeprg = old_makeprg
+      vim.o.errorformat = old_efm
+
+      local qf = vim.fn.getqflist({ size = 0 })
+      if qf.size > 0 then
+        print("dotnet test failed")
+        vim.cmd("copen")
+      else
+        print("all tests pass")
+      end
+    end, { desc = "C# run tests" })
+
     require("roslyn").setup({
       ignore_target = function(target) return string.match(target, "$project$.sln") ~= nil end,
       lock_target = true,
@@ -43,70 +86,6 @@ return {
     })
   end,
   init = function()
-    -- Custom progress tracking for Roslyn solution loading
-    local loading_handles = {}
-    local initialized_clients = {} -- Track clients that have finished initializing
-
-    -- Start progress when Roslyn attaches (before initialization completes)
-    vim.api.nvim_create_autocmd("LspAttach", {
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client and (client.name == "roslyn" or client.name == "roslyn_ls") then
-          -- Only show progress if this client hasn't initialized yet
-          if not initialized_clients[args.data.client_id] and not loading_handles[args.data.client_id] then
-            local ok, fidget = pcall(require, "fidget.progress")
-            if ok then
-              loading_handles[args.data.client_id] = fidget.handle.create({
-                title = "Initializing",
-                message = "Loading solution...",
-                lsp_client = { name = "roslyn" },
-                percentage = 0,
-              })
-            end
-          end
-        end
-      end,
-    })
-
-    -- Finish progress when Roslyn initialization completes
-    vim.api.nvim_create_autocmd("User", {
-      pattern = "RoslynInitialized",
-      callback = function(ev)
-        local client_id = ev.data and ev.data.client_id
-        if client_id then
-          -- Mark this client as initialized
-          initialized_clients[client_id] = true
-          if loading_handles[client_id] then
-            loading_handles[client_id].message = "Ready"
-            loading_handles[client_id]:finish()
-            loading_handles[client_id] = nil
-          end
-        else
-          -- If we don't have a specific client_id, finish all handles
-          for cid, handle in pairs(loading_handles) do
-            initialized_clients[cid] = true
-            handle.message = "Ready"
-            handle:finish()
-            loading_handles[cid] = nil
-          end
-        end
-      end,
-    })
-
-    -- Clean up when client detaches
-    vim.api.nvim_create_autocmd("LspDetach", {
-      callback = function(args)
-        local client = vim.lsp.get_client_by_id(args.data.client_id)
-        if client and (client.name == "roslyn" or client.name == "roslyn_ls") then
-          initialized_clients[args.data.client_id] = nil
-          if loading_handles[args.data.client_id] then
-            loading_handles[args.data.client_id]:finish()
-            loading_handles[args.data.client_id] = nil
-          end
-        end
-      end,
-    })
-
     -- Auto-insert XML doc comments on '/'
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
