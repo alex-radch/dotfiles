@@ -45,5 +45,17 @@ return {
         processId = require("dap.utils").pick_process,
       },
     }
+
+    vim.api.nvim_create_autocmd("FileType", {
+      pattern = "dap-float",
+      callback = function()
+        local buf = vim.api.nvim_get_current_buf()
+        local win = vim.api.nvim_get_current_win()
+
+        -- 1. Close with 'q' or '<Esc>' when inside the window
+        vim.keymap.set("n", "q", "<cmd>close!<CR>", { buffer = buf, silent = true })
+        vim.keymap.set("n", "<Esc>", "<cmd>close!<CR>", { buffer = buf, silent = true })
+      end,
+    })
   end,
 }

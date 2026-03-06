@@ -150,12 +150,7 @@ case "$SELECTED_COMMAND" in
     FINAL_CMD="dotnet ef migrations add \"$MIGRATION_NAME\" $OUTPUT_DIR_FLAG $BASE_FLAGS"
     ;;
   "migrations script")
-    read -rp "Enter FROM migration name: " FROM_MIGRATION
-    if [ -z "$FROM_MIGRATION" ]; then
-      echo "FROM migration name is required."
-      exit 1
-    fi
-    
+    read -rp "Enter FROM migration name (optional, leave empty for first): " FROM_MIGRATION
     read -rp "Enter TO migration name (optional, leave empty for latest): " TO_MIGRATION
     
     read -rp "Make script idempotent? (y/N): " IDEMPOTENT
@@ -168,8 +163,12 @@ case "$SELECTED_COMMAND" in
     fi
     
     # Build command parts
-    SCRIPT_CMD="dotnet ef migrations script \"$FROM_MIGRATION\""
+    SCRIPT_CMD="dotnet ef migrations script"
     
+    if [ -n "$FROM_MIGRATION" ]; then
+      SCRIPT_CMD="$SCRIPT_CMD \"$FROM_MIGRATION\""
+    fi
+
     if [ -n "$TO_MIGRATION" ]; then
       SCRIPT_CMD="$SCRIPT_CMD \"$TO_MIGRATION\""
     fi
