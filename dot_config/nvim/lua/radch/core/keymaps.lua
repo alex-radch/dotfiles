@@ -44,6 +44,25 @@ keymap.set("n", "<leader>sh", "<C-w>s", { desc = "Split window horizontally" })
 keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" })
 keymap.set("n", "<leader>sx", "<cmd>close<CR>", { desc = "Close current split" })
 
+-- quickfix management
+keymap.set("n", "<A-j>", "<cmd>cn<CR>", { desc = "Next quickfix entry" })
+keymap.set("n", "<A-k>", "<cmd>cp<CR>", { desc = "Prev quickfix entry" })
+keymap.set("n", "<A-CR>", function()
+  local windows = vim.fn.getwininfo()
+  for _, win in pairs(windows) do
+    -- Check if a quickfix window is open in the current tab
+    if win["quickfix"] == 1 and win["tabnr"] == vim.fn.tabpagenr() then
+      vim.cmd.cclose() -- Close it
+      return
+    end
+  end
+
+  -- If not open, check if list is empty and open it
+  if not vim.tbl_isempty(vim.fn.getqflist()) then
+    vim.cmd.copen() -- Open it
+  end
+end, { desc = "Toggle quickfix" })
+
 -- tab management
 keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
 keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })

@@ -2,6 +2,7 @@ font-family = "CaskaydiaMono Nerd Font"
 font-size = 16
 
 theme = Kanagawa Wave
+palette = 2=#4a684a
 
 confirm-close-surface=false
 keybind = shift+enter=text:\n
