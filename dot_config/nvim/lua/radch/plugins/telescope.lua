@@ -37,6 +37,10 @@ return {
         lsp_document_symbols = {
           theme = "ivy",
         },
+        lsp_references = {
+          path_display = { "tail" },
+          wrap_results = true,
+        },
         diagnostics = {
           theme = "ivy",
           initial_mode = "normal",
