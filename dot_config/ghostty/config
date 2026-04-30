@@ -4,8 +4,17 @@ font-size = 16
 theme = Kanagawa Wave
 palette = 2=#4a684a
 
-confirm-close-surface=false
+cursor-style = block
+window-decoration = false
+
+mouse-hide-while-typing = true
+confirm-close-surface = false
+
+shell-integration = detect
+shell-integration-features = true
 keybind = shift+enter=text:\n
+
+app-notifications = no-clipboard-copy,no-config-reload
 
 # Shader configurations
 # Uncomment one of the following lines to enable a shader:
