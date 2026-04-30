@@ -86,6 +86,14 @@ return {
     })
   end,
   init = function()
+    -- Register razor filetypes before the plugin loads
+    vim.filetype.add({
+      extension = {
+        razor = "razor",
+        cshtml = "razor",
+      },
+    })
+
     -- Auto-insert XML doc comments on '/'
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(args)
@@ -152,14 +160,6 @@ return {
           })
         end
       end,
-    })
-
-    -- Register razor filetypes before the plugin loads
-    vim.filetype.add({
-      extension = {
-        razor = "razor",
-        cshtml = "razor",
-      },
     })
   end,
 }

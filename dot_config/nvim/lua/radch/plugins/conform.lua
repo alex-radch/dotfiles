@@ -9,6 +9,7 @@ return {
         javascript = { "prettier" },
         typescript = { "prettier" },
         lua = { "stylua" },
+        xml = { "xmlformatter" },
         ["_"] = { "default_indent", lsp_format = "prefer" },
       },
       formatters = {
