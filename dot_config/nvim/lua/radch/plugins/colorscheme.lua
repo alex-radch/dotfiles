@@ -4,6 +4,7 @@ return {
   config = function()
     require("kanagawa").setup({
       keywordStyle = { italic = false },
+      commentStyle = { italic = false },
     })
     vim.cmd("colorscheme kanagawa")
   end,

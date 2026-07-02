@@ -10,6 +10,7 @@ return {
         typescript = { "prettier" },
         lua = { "stylua" },
         xml = { "xmlformatter" },
+        c = { "clang-format" },
         ["_"] = { "default_indent", lsp_format = "prefer" },
       },
       formatters = {

@@ -4,6 +4,7 @@
     "trigger": "="
   },
   "emojiLauncher": {
-    "enabled": true
+    "enabled": true,
+    "recentEmojis": ""
   }
 }

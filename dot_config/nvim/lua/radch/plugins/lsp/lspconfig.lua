@@ -117,6 +117,7 @@ return {
       },
       laravel_ls = {},
       go_pls = {},
+      clangd = {},
     }
 
     for server_name, config in pairs(servers) do
@@ -138,6 +139,7 @@ return {
         "tailwindcss",
         "lua_ls",
         "emmet_ls",
+        "clangd",
       },
     })
 
@@ -147,6 +149,7 @@ return {
         "prettier", -- prettier formatter
         "stylua", -- lua formatter
         "eslint_d",
+        "clang-format",
       },
     })
   end,

@@ -8,7 +8,7 @@ return {
         gitsigns.setup()
 
         vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk_inline, { desc = "Git preview hunk inline" })
-        vim.keymap.set("n", "<leader>gb", gitsigns.blame, { desc = "Git blame" })
+        vim.keymap.set("n", "<leader>gb", function() gitsigns.blame({ ignore_whitespace = true }) end, { desc = "Git blame" })
       end,
     },
   },
